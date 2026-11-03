@@ -1,0 +1,11 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Arial, sans-serif; color: #1a1a1a; background: #f0f4f8; line-height: 1.5; }
+header { padding: 48px 24px; background: #003366; color: #fff; text-align: center; }
+header a { color: #fff; }
+.marca { margin: 0; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; color: #cfe0f1; }
+h1 { margin: 12px 0; font-size: 2rem; }
+main { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; max-width: 960px; margin: 0 auto; padding: 24px; }
+section { padding: 16px 20px; background: #fff; border-left: 4px solid #003366; }
+h2 { margin: 0 0 8px; color: #003366; }
+section p { margin: 0; }
+footer { padding: 16px; text-align: center; color: #444; }

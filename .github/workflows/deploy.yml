@@ -1,0 +1,49 @@
+name: Probar y desplegar
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  probar:
+    name: 1. Prueba en Floci
+    runs-on: ubuntu-latest
+    services:
+      floci:
+        image: floci/floci:latest
+        ports:
+          - 4566:4566
+    env:
+      AWS_ENDPOINT_URL: http://localhost:4566
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_DEFAULT_REGION: us-east-1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Esperar a que Floci arranque
+        run: |
+          for i in $(seq 1 30); do
+            curl -s -o /dev/null http://localhost:4566/ && exit 0
+            sleep 2
+          done
+          exit 1
+      - name: Desplegar en Floci
+        run: bash deploy.sh
+
+  desplegar:
+    name: 2. Despliegue en AWS
+    needs: probar
+    runs-on: ubuntu-latest
+    env:
+      AWS_DEFAULT_REGION: us-east-1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cargar las credenciales de Learner Lab
+        env:
+          AWS_CREDENTIALS: ${{ secrets.AWS_CREDENTIALS }}
+        run: |
+          mkdir -p ~/.aws
+          printf '%s\n' "$AWS_CREDENTIALS" > ~/.aws/credentials
+      - name: Desplegar en AWS
+        run: bash deploy.sh

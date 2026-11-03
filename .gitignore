@@ -1,0 +1,5 @@
+# Nunca subas credenciales al repositorio
+.aws/
+credentials
+*.pem
+.env
